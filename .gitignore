@@ -2,3 +2,12 @@
 /.idea/
 *.iml
 *.jar
+bin/
+
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.gradletasknamecache
+*.class
+*.log
+.vscode/
