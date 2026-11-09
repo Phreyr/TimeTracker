@@ -5,6 +5,7 @@ main: com.cedeel.timetracker.Plugin
 name: ${name}
 website: https://github.com/Phreyr/TimeTracker
 version: ${version}
+api-version: "1.20"
 commands:
   seen: 
     description: Find when a player was last online on your server
