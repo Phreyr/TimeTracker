@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 - 2014 cedeel.
+ * Copyright (c) 2013 - 2026 cedeel.
  * All rights reserved.
  * 
  *
@@ -29,7 +29,10 @@ package com.cedeel.timetracker.commands;
 import com.cedeel.timetracker.TimeTracker;
 import com.cedeel.timetracker.TrackedPlayer;
 import com.cedeel.timetracker.Util.Util;
-import org.bukkit.ChatColor;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -53,20 +56,19 @@ public final class PlaytimeCommand implements CommandExecutor {
             if (args.length < 1) {
                 long first = tracked.getFirstJoined();
                 if (first != Util.UNINITIALISED_TIME) {
-                    player.sendMessage(ChatColor.YELLOW + "Your first login was "
-                            + ChatColor.GREEN + tracker.sinceString(first, (new Date()).getTime()));
+                    player.sendMessage(Component.text("Your first login was ", NamedTextColor.YELLOW)
+                        .append(Component.text(tracker.sinceString(first, (new Date().getTime())), NamedTextColor.GREEN))
+                    );
                 }
                 long now = (new Date()).getTime();
-                player.sendMessage(ChatColor.YELLOW + "Current session has lasted "
-                        + ChatColor.GREEN
-                        + Util.humanTime(tracked.getLastSeen(), now));
-                player.sendMessage(ChatColor.YELLOW + "You have spent a total of "
-                        + ChatColor.GREEN + Util.humanTime(0L,
-                        (now - tracked.getLastSeen())
-                                + tracked.getPlaytime())
-                        + ChatColor.YELLOW + " on this server.");
+                player.sendMessage(Component.text("Current session has lasted ", NamedTextColor.YELLOW)
+                    .append(Component.text(Util.humanTime(tracked.getLastSeen(), now), NamedTextColor.GREEN)));
+                player.sendMessage(Component.text("You have spent a total of ", NamedTextColor.YELLOW)
+                    .append(Component.text(Util.humanTime(0L, (now - tracked.getLastSeen()) + tracked.getPlaytime()), NamedTextColor.GREEN))
+                    .append(Component.text(" on this server.", NamedTextColor.YELLOW))
+                );
             } else
-                player.sendMessage(ChatColor.RED + "Usage: /playtime");
+                player.sendMessage(Component.text("Usage: /playtime", NamedTextColor.RED));
 
             return true;
         } else

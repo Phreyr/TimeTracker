@@ -30,8 +30,11 @@ import com.cedeel.timetracker.TimeTracker;
 import com.cedeel.timetracker.TrackedPlayer;
 import com.cedeel.timetracker.Util.UUIDFetcher;
 import com.cedeel.timetracker.Util.Util;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
-import static org.bukkit.ChatColor.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,23 +63,28 @@ public final class SeenCommand implements CommandExecutor {
             TrackedPlayer tracked = tracker.getPlayer(playerId);
             if (tracked != null) {
                 if (tracked.getFirstJoined() != Util.UNINITIALISED_TIME)
-                    if (playerName.equalsIgnoreCase(sender.getName().toLowerCase()))
-                        sender.sendMessage(YELLOW + "Still trying to find yourself, bud?");
-                    else {
-                        sender.sendMessage(AQUA + "===== " + GREEN + "Player times for " + playerName + AQUA + " =====");
-                        if (tracked.getLastSeen() != Util.UNINITIALISED_TIME)
-                            sender.sendMessage(YELLOW + "Last seen " + GREEN + tracker.sinceString(tracked.getLastSeen(), (new Date()).getTime()));
-                        sender.sendMessage(YELLOW + "First logon was " + GREEN + tracker.sinceString(tracked.getFirstJoined(), (new Date()).getTime()));
-                        sender.sendMessage(YELLOW + "Has spent " + GREEN + Util.humanTime(0L, tracked.getPlaytime()) + YELLOW + " on the server.");
-                        if (Bukkit.getOfflinePlayer(playerId).isOnline())
-                            sender.sendMessage(GREEN + playerName + " is online right now! Say hey!");
+                    if (playerName.equalsIgnoreCase(sender.getName().toLowerCase())) {
+                        sender.sendMessage(Component.text("Still trying to find yourself, bud?", NamedTextColor.YELLOW));
+                    } else {
+                        // sender.sendMessage(AQUA + "===== " + GREEN + "Player times for " + playerName + AQUA + " =====");
+                        if (tracked.getLastSeen() != Util.UNINITIALISED_TIME) {
+                            // sender.sendMessage(YELLOW + "Last seen " + GREEN + tracker.sinceString(tracked.getLastSeen(), (new Date()).getTime()));
+                        }
+                        // sender.sendMessage(YELLOW + "First logon was " + GREEN + tracker.sinceString(tracked.getFirstJoined(), (new Date()).getTime()));
+                        // sender.sendMessage(YELLOW + "Has spent " + GREEN + Util.humanTime(0L, tracked.getPlaytime()) + YELLOW + " on the server.");
+                        if (Bukkit.getOfflinePlayer(playerId).isOnline()) {
+                            // sender.sendMessage(GREEN + playerName + " is online right now! Say hey!");
+                        }
                     }
-                else
-                    sender.sendMessage(YELLOW + playerName + " has never been here before.");
-            } else
-                sender.sendMessage(RED + "Sorry bud, " + args[0] + " is not a Minecraft account. Did you make a typo?");
-        } else
-            sender.sendMessage(RED + "Usage: /seen <username>");
+                else {
+                    // sender.sendMessage(YELLOW + playerName + " has never been here before.");
+                }
+            } else {
+                // sender.sendMessage(RED + "Sorry bud, " + args[0] + " is not a Minecraft account. Did you make a typo?");
+            }
+        } else {
+            // sender.sendMessage(RED + "Usage: /seen <username>");
+        }
 
         return true;
     }

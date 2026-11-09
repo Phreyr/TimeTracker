@@ -29,8 +29,11 @@ package com.cedeel.timetracker;
 import com.cedeel.timetracker.commands.PlaytimeCommand;
 import com.cedeel.timetracker.commands.SeenCommand;
 import com.cedeel.timetracker.listeners.TimeTrackerPlayerListener;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,7 +45,7 @@ public class Plugin extends JavaPlugin {
     private TimeTracker tracker;
 
     // Join message
-    private String joinMsg;
+    private Component joinMsg;
 
     @Override
     public void onEnable() {
@@ -54,9 +57,10 @@ public class Plugin extends JavaPlugin {
         for (Player p : getServer().getOnlinePlayers())
             addPlayerAsync(p.getUniqueId());
 
-        joinMsg = ChatColor.translateAlternateColorCodes('&', getConfig().getString("MessageColour", "&e")) +
-                getConfig().getString("JoinMessage", "Welcome %p to the server!");
-
+        String joinString = getConfig().getString("MessageColour", "&e")
+            + getConfig().getString("JoinMessage", "Welcome %p to the server!");
+        joinMsg = LegacyComponentSerializer.legacyAmpersand().deserialize(joinString);
+        
         this.getLogger().info("All good. Loaded successfully");
     }
 
@@ -94,7 +98,9 @@ public class Plugin extends JavaPlugin {
             public void run() {
                 tracker.addPlayer(id);
                 if (tracker.isFirstSession(id)) {
-                    Bukkit.getServer().broadcastMessage(joinMsg.replace("%p", getServer().getPlayer(id).getDisplayName()));
+                    Bukkit.getServer().broadcast(joinMsg.replaceText(
+                        b -> b.matchLiteral("%p").replacement(getServer().getPlayer(id).displayName())
+                    ));
                 }
             }
         }.runTaskAsynchronously(this);
